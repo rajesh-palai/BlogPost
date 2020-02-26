@@ -1,0 +1,20 @@
+{% extends "blog/base.html" %}
+    {% block content %}
+    <div class="row">
+      {% for p in fav_posts %}
+        <div class="col-md-6">
+            <div class="img-thumbnail">
+                <a href="{% url 'blog:post_detail' p.id p.slug %}">{{p.title}}</a><small style="float:right">{{p.created}}</small><br>
+                Author : {{p.author}}<br>
+                {{p.body}}<br>
+
+            </div>
+            <br>
+        </div>
+        {% empty %}
+            <div class="container-fluid">
+                    <h3>No favourite posts found</h3>
+            </div>
+      {% endfor %}
+    </div>
+    {% endblock %}

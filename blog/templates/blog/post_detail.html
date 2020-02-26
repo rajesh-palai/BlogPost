@@ -1,0 +1,60 @@
+{% extends "blog/base.html" %}
+    {% block title %}{{post.title}} | {{block.super}}{% endblock %}
+    {% block content %}
+    {% include 'blog/alerts.html' %}
+    <h3>{{ post.title }}</h3>
+    <small>Post created by: {{ post.author }}</small>
+    <hr>
+    <p>{{ post.body }}</p>
+
+    <div class="row gallery">
+        {% for p in post.images_set.all %}
+            <div class="col-md-3">
+                <img src="{{ p.image.url }}" alt ="image not found" class="img-thumbnail">
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="like-section">
+         {% include 'blog/like_section.html' %}
+    </div>
+
+    <div id="favourite-section">
+        {% if is_favourite %}
+            <a href="{% url 'blog:favourite_post' id=post.id %}">
+                <i class="fas fa-heart fa-lg"></i>
+            </a>
+        {% else %}
+            <a href="{% url 'blog:favourite_post' id=post.id %}">
+                <i class="far fa-heart fa-lg"></i>
+            </a>
+        {% endif %}
+    </div>
+
+    {% if post.author == request.user %}
+    <div class="section-1" style="float:right;">
+        <a href="{% url 'blog:post_edit' id=post.id %}">
+            <button type="submit" class="btn btn-outline-success">Edit</button>
+        </a>
+        <a href="{% url 'blog:post_delete' id=post.id %}" id="delete">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </a>
+    </div>
+    {% else %}
+    <div class="section-2" style="float:right;">
+        <small>can not edit or delete: author mismatch</small>
+    </div>
+    {% endif %}
+
+
+    <br><br>
+    <hr>
+
+    {% if not post.restrict_comment %}
+    <div class="main-comment-section">
+        {% include 'blog/comments.html' %}
+    </div>
+    {% endif %}
+    {% endblock %}
+
+
